@@ -1,0 +1,24 @@
+<div class="fwm-select" (click)="enableDropdown()">
+  <div class="fwm-selector" *ngIf="!isDropdownActive">{{placeholder}}</div>
+  <div class="fwm-dropdown" *ngIf="isDropdownActive">
+      <input type="search" name="search" [(ngModel)]="searchInput" class="form-control" placeholder="{{placeholder}}" #search>
+      <div class="fwm-dropdown__item-list">
+          <ng-container *ngIf="(items | filterBy: [searchParam]: searchInput) as result">
+              <div *ngFor="let item of result; let i = index">
+                  <div class="list-options clearfix">
+                      <div class="float-start">
+                          <div class="form-check">
+                              <input class="form-check-input" name="{{item.name+i}}" type="checkbox" id="{{item.name}}" [checked]="getSelected(item)" (change)="changeHandler(item, $event)">
+                              <label class="form-check-label" for="{{item.name}}">{{item.name}}</label>
+                          </div>
+                      </div>
+                      <div class="count float-end">
+                          <span>{{item.count}}</span>
+                      </div>
+                  </div>
+              </div>
+              <label class="result-not-found" *ngIf="result.length === 0">No Result Found</label>
+          </ng-container>
+      </div>
+  </div>
+</div>

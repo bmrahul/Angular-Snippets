@@ -1,0 +1,350 @@
+<div class="select-wrapper" *ngIf="type === 'single'">
+  <div class="d-flex justify-content-start align-items-center">
+    <div
+      class="d-flex option-holder"
+      *ngIf="!isDropdownActive"
+      (click)="showDropdown()"
+    >
+      <div class="d-flex align-items-center chip" *ngIf="selection.length > 0">
+        <span class="form-check-label">{{ _placeholder }}</span>
+        <button
+          class="ms-1 icon"
+          (click)="$event.stopPropagation(); clearSelectedOption()"
+        >
+          <span class="icomoon icon-Close"></span>
+        </button>
+      </div>
+      <span *ngIf="selection.length === 0" class="initial-placeholder">{{
+        _placeholder
+      }}</span>
+      <button
+        class="chevron-down icon"
+        (click)="$event.stopPropagation(); showDropdown()"
+      >
+        <span class="icomoon icon-arrow-bottom"></span>
+      </button>
+    </div>
+    <div class="editable col-12" *ngIf="isDropdownActive">
+      <input
+        type="text"
+        name="search"
+        [(ngModel)]="searchInput"
+        class="fwm-selector form-control"
+        placeholder="{{ _placeholder }}"
+        #search
+      />
+      <button
+        class="chevron-up icon"
+        (click)="$event.stopPropagation(); hideDropdown()"
+      >
+        <span class="icomoon icon-arrow-left-1"></span>
+      </button>
+      <div class="fwm-dropdown__item-list col-12">
+        <ng-container
+          *ngIf="items | filterBy : [searchParam] : searchInput as result"
+        >
+          <div
+            class="ng-star-inserted cursor"
+            *ngFor="let item of result; let i = index"
+          >
+            <div
+              class="list-options clearfix"
+              (click)="$event.stopPropagation(); selectSingleOption(item)"
+            >
+              <div class="float-start">
+                <span class="form-check-label">{{ item.name }}</span>
+              </div>
+              <div class="count float-end" *ngIf="item.count">
+                <span>{{ item.count }}</span>
+              </div>
+            </div>
+          </div>
+          <span class="result-not-found" *ngIf="result.length === 0"
+            >No Result Found</span
+          >
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="type === 'multiple'">
+  <div class="fwm-select" (click)="showDropdown()">
+    <div class="fwm-selector" *ngIf="!isDropdownActive">{{ _placeholder }}</div>
+    <button
+      class="chevron-down icon"
+      (click)="$event.stopPropagation(); showDropdown()"
+    >
+      <span class="icomoon icon-arrow-bottom"></span>
+    </button>
+    <div class="fwm-dropdown" *ngIf="isDropdownActive">
+      <input
+        type="text"
+        name="search"
+        [(ngModel)]="searchInput"
+        class="fwm-selector form-control"
+        placeholder="{{ _placeholder }}"
+        #search
+      />
+      <button
+        class="chevron-up icon"
+        (click)="$event.stopPropagation(); hideDropdown()"
+      >
+        <span class="icomoon icon-arrow-left-1"></span>
+      </button>
+      <div class="fwm-dropdown__item-list">
+        <ng-container
+          *ngIf="items | filterBy : [searchParam] : searchInput as result"
+        >
+          <div
+            class="ng-star-inserted"
+            *ngFor="let item of result; let i = index"
+          >
+            <div class="list-options clearfix">
+              <div class="float-start">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    name="{{ item.name + i }}"
+                    type="checkbox"
+                    id="{{ item.name }}"
+                    [checked]="getSelected(item)"
+                    (change)="selectMultipleOption(item, $event)"
+                  />
+                  <label class="form-check-label" for="{{ item.name }}">{{
+                    item.name
+                  }}</label>
+                </div>
+              </div>
+              <div class="count float-end">
+                <span>{{ item.count }}</span>
+              </div>
+            </div>
+          </div>
+          <span class="result-not-found" *ngIf="result.length === 0"
+            >No Result Found</span
+          >
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="select-wrapper" *ngIf="type === 'equipment'">
+  <div class="d-flex justify-content-start align-items-center">
+    <div
+      class="d-flex option-holder"
+      *ngIf="!isDropdownActive"
+      (click)="showDropdown()"
+    >
+      <div class="d-flex align-items-center chip" *ngIf="selection.length > 0">
+        <div
+          class="equip-image d-flex justify-content-start align-items-center"
+        >
+          <img
+            class="equip-img"
+            [src]="'data:image/png;base64,' + selection[0].image"
+            [alt]="selection[0].name"
+            *ngIf="selection[0].image !== null"
+          />
+          <img
+            class="equip-img"
+            src="assets/images/img/Obs_Instrument.png"
+            alt="Obs_Instrument"
+            *ngIf="selection[0].image === null"
+          />
+        </div>
+        <div class="equip-details d-flex flex-column">
+          <span class="equip-name">{{ selection[0].name }}</span>
+          <span class="equip-description ellipsis">{{
+            selection[0].description
+          }}</span>
+        </div>
+        <button
+          class="ms-1 icon"
+          (click)="$event.stopPropagation(); clearSelectedOption()"
+        >
+          <span class="icomoon icon-Close"></span>
+        </button>
+      </div>
+      <span *ngIf="selection.length === 0" class="initial-placeholder">{{
+        _placeholder
+      }}</span>
+      <button
+        class="chevron-down icon"
+        (click)="$event.stopPropagation(); showDropdown()"
+      >
+        <span class="icomoon icon-arrow-bottom"></span>
+      </button>
+    </div>
+    <div class="editable col-12" *ngIf="isDropdownActive">
+      <input
+        type="text"
+        name="content"
+        [(ngModel)]="searchInput"
+        class="fwm-selector form-control"
+        placeholder="{{ _placeholder }}"
+        (input)="searchValue($event)"
+        #contentRef
+      />
+      <button
+        class="chevron-up icon"
+        (click)="$event.stopPropagation(); hideDropdown()"
+      >
+        <span class="icomoon icon-arrow-left-1"></span>
+      </button>
+      <div class="fwm-dropdown__item-list col-12" *ngIf="isDropdownActive">
+        <div
+          class="ng-star-inserted cursor"
+          *ngFor="let item of equipmentList; let i = index"
+        >
+          <div
+            class="list-options d-flex"
+            (click)="$event.stopPropagation(); selectSingleOption(item)"
+          >
+            <div
+              class="equip-image d-flex justify-content-start align-items-center"
+            >
+              <img
+                class="equip-img"
+                [src]="'data:image/png;base64,' + item.image"
+                [alt]="item.name"
+                *ngIf="item.image !== null"
+              />
+              <img
+                class="equip-img"
+                src="assets/images/img/Obs_Instrument.png"
+                alt="Obs_Instrument"
+                *ngIf="item.image === null"
+              />
+            </div>
+            <div class="equip-details d-flex flex-column">
+              <span class="equip-name">{{ item.name }}</span>
+              <span class="equip-description ellipsis">{{
+                item.description
+              }}</span>
+            </div>
+          </div>
+        </div>
+        <span class="result-not-found" *ngIf="equipmentList.length === 0"
+          >No Result Found</span
+        >
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="select-wrapper" *ngIf="type === 'functional'">
+  <div class="d-flex justify-content-start align-items-center">
+    <div
+      class="d-flex option-holder"
+      *ngIf="!isDropdownActive"
+      (click)="showDropdown()"
+    >
+      <div class="d-flex align-items-center chip" *ngIf="selection.length > 0">
+        <div class="equip-details d-flex flex-column">
+          <span class="equip-name">{{ selection[0].name }}</span>
+          <span class="equip-description ellipsis">{{
+            selection[0].description
+          }}</span>
+        </div>
+        <button
+          class="ms-1 icon"
+          (click)="$event.stopPropagation(); clearSelectedOption()"
+        >
+          <span class="icomoon icon-Close"></span>
+        </button>
+      </div>
+      <span *ngIf="selection.length === 0" class="initial-placeholder">{{
+        _placeholder
+      }}</span>
+      <button
+        class="chevron-down icon"
+        (click)="$event.stopPropagation(); showDropdown()"
+      >
+        <span class="icomoon icon-arrow-bottom"></span>
+      </button>
+    </div>
+    <div class="editable col-12" *ngIf="isDropdownActive">
+      <input
+        type="text"
+        name="content"
+        [(ngModel)]="searchInput"
+        class="fwm-selector form-control"
+        placeholder="{{ _placeholder }}"
+        (input)="searchValue($event)"
+        #contentRef
+      />
+      <button
+        class="chevron-up icon"
+        (click)="$event.stopPropagation(); hideDropdown()"
+      >
+        <span class="icomoon icon-arrow-left-1"></span>
+      </button>
+      <div class="fwm-dropdown__item-list col-12" *ngIf="isDropdownActive">
+        <div
+          class="ng-star-inserted cursor"
+          *ngFor="let item of functionalList; let i = index"
+        >
+          <div
+            class="list-options d-flex"
+            (click)="$event.stopPropagation(); selectSingleOption(item)"
+          >
+            <div class="equip-details d-flex flex-column">
+              <span class="equip-name">{{ item.name }}</span>
+              <span class="equip-description ellipsis">{{
+                item.description
+              }}</span>
+            </div>
+          </div>
+        </div>
+        <span class="result-not-found" *ngIf="functionalList.length === 0"
+          >No Result Found</span
+        >
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="type === 'pattern'">
+  <div class="fwm-select" (click)="showDropdown()">
+    <div class="pattern-selector ellipsis" *ngIf="!isDropdownActive">
+      {{ _placeholder }}
+    </div>
+    <div class="fwm-dropdown" *ngIf="isDropdownActive">
+      <input
+        type="search"
+        name="search"
+        [(ngModel)]="searchInput"
+        class="pattern-form-control"
+        placeholder="{{ placeholder }}"
+        #search
+      />
+      <div class="fwm-dropdown__item-list">
+        <ng-container
+          *ngIf="items | filterBy : [searchParam] : searchInput as result"
+        >
+          <div
+            class="ng-star-inserted cursor"
+            *ngFor="let item of result; let i = index"
+          >
+            <div
+              class="list-options clearfix"
+              (click)="$event.stopPropagation(); selectSingleOption(item)"
+            >
+              <div class="float-start">
+                <span class="form-check-label">{{ item.name }}</span>
+              </div>
+              <div class="count float-end" *ngIf="item.count">
+                <span>{{ item.count }}</span>
+              </div>
+            </div>
+          </div>
+          <span class="result-not-found" *ngIf="result.length === 0"
+            >No Result Found</span
+          >
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<div class="col-3 m-4">
+  <!-- ngx-select -->
+  <ng-select
+    [type]="'single'"
+    [items]="statusList"
+    [searchParam]="'name'"
+    [placeholder]="'Select Status'"
+    (selectedValue)="getSelectedStatus($event)"
+  ></ng-select>
+</div>
