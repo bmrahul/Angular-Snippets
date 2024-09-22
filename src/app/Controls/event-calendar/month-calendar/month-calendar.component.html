@@ -1,0 +1,17 @@
+<div class="calendar-wrapper">
+    <div class="calendar-header">
+        <div class="calendar-header__date">{{ date | date: 'dd MMMM yyyy'}}</div>
+    </div>
+    <div class="calendar-body">
+        <div class="calendar-body__days">
+            <div class="calendar-body__day" *ngFor="let day of days">
+                <span>{{ day }}</span>
+            </div>
+        </div>
+        <div class="calendar-body__dates">
+            <div class="calendar-body__date" *ngFor="let item of dates">
+                <div [ngClass]="item.disabled ? 'date-disabled' : 'date-enabled'">{{ item.date | date: 'dd'}}</div>
+            </div>
+        </div>
+    </div>
+</div>

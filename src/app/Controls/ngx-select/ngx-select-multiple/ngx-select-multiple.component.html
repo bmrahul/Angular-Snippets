@@ -1,0 +1,37 @@
+<div class="select-wrapper">
+    <div class="d-flex justify-content-start align-items-center">
+        <div class="d-flex option-holder" *ngIf="!isDropdownActive" (click)="showDropdown()">
+            <div class="d-flex align-items-center" *ngIf="selectedItems.length > 0">
+                <div class="equip-details d-flex flex-column">
+                    <span class="selected-single-value">
+                        {{selectedItems[0][value]}}<span *ngIf="selectedItems.length > 1"> + {{selectedItems.length - 1}}</span>
+                    </span>
+                </div>
+            </div>
+            <span *ngIf="selectedItems.length == 0" class="initial-placeholder">{{placeholder}}</span>
+            <button class="chevron-down icon" (click)="$event.stopPropagation(); showDropdown()"><span class="icomoon icon-arrow-bottom"></span></button>
+        </div>
+        <div class="editable col-12" *ngIf="isDropdownActive">
+            <input #contentRef type="text" name="content" [(ngModel)]="searchInput" class="fwm-selector form-control" [placeholder]="selectedItems.length > 0 ? selectedItems.length == 1 ? selectedItems[0][value] : selectedItems[0][value] + ' + ' + (selectedItems.length - 1) : placeholder" >
+            <button class="chevron-up icon" (click)="$event.stopPropagation(); hideDropdown()"><span class="icomoon icon-arrow-left-1"></span></button>
+            <div class="fwm-dropdown__item-list col-12" *ngIf="isDropdownActive">
+                <ng-container *ngIf="(items | filterBy: [searchParam]: searchInput) as result">
+                    <div class="ng-star-inserted cursor" *ngFor="let item of result; let i = index">
+                        <div class="list-options clearfix">
+                            <div class="float-start">
+                                <div class="form-check">
+                                    <input class="form-check-input" [name]="item[value]+i" type="checkbox" [id]="item[value]" [checked]="getSelected(item)" (change)="onChecked(item)">
+                                    <label class="form-check-label" [for]="item[value]">{{item[value]}}</label>
+                                </div>
+                            </div>
+                            <div class="count float-end" *ngIf="item.count">
+                                <span>{{item.count}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="result-not-found" *ngIf="result.length == 0">No Result Found</span>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
